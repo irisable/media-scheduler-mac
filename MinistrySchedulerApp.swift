@@ -10,8 +10,9 @@ struct MinistrySchedulerApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(store)
-                .frame(minWidth: 1180, minHeight: 720)
+                .frame(minWidth: 1120, minHeight: 820)
         }
+        .defaultSize(width: 1180, height: 860)
     }
 }
 

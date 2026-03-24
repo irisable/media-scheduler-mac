@@ -96,6 +96,10 @@ final class SchedulerStore: ObservableObject {
         sanitizedMembers(for: role.group)
     }
 
+    func activeMembers(for role: DutyRole) -> [MemberEntry] {
+        members(for: role).filter { !$0.paused }
+    }
+
     func monthTitle() -> String {
         let calendar = Calendar.current
         guard
@@ -251,7 +255,7 @@ final class SchedulerStore: ObservableObject {
         monthlyCaps: [String: Int]
     ) -> [String] {
         rotatedMembers(
-            members(for: role),
+            activeMembers(for: role),
             shift: seed + weekIndex + roleIndex
         )
         .filter { member in

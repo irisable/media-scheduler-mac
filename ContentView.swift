@@ -31,7 +31,7 @@ struct ContentView: View {
                 Text("成员清单配置")
                     .font(.title3.weight(.semibold))
 
-                Text("PPT与周报各维护一组成员；可标记“仅校对”。自动排班会避免同日跨组重复、且每人每月最多2次。")
+                Text("PPT与周报各维护一组成员；可标记“仅校对”或“暂停服侍”。自动排班会避免同一行重名，且每人每月最多2次。")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
@@ -209,7 +209,7 @@ struct ContentView: View {
     }
 
     private func pickerOptions(for role: DutyRole, row: ScheduleRow) -> [String] {
-        let allMembers = store.members(for: role)
+        let allMembers = store.activeMembers(for: role)
         let currentSelection = row.assignments[role, default: ""]
         let conflictingSameDay = sameDayConflictingNames(for: role, in: row)
 
@@ -339,6 +339,11 @@ struct ContentView: View {
             reasons.append("该成员标记为仅校对")
         }
 
+        if let member = store.members(for: role).first(where: { $0.name == name }),
+           member.paused {
+            reasons.append("该成员已暂停服侍")
+        }
+
         let totalMonthlyCount = store.rows.reduce(0) { count, item in
             count + item.assignments.values.filter { $0 == name }.count
         }
@@ -396,6 +401,7 @@ private struct MemberListEditor: View {
     let group: MemberGroup
     @State private var newMember = ""
     @State private var newProofOnly = false
+    @State private var newPaused = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -409,6 +415,9 @@ private struct MemberListEditor: View {
                         Toggle("仅校对", isOn: proofOnlyBinding(index))
                             .toggleStyle(.checkbox)
                             .frame(width: 72)
+                        Toggle("暂停服侍", isOn: pausedBinding(index))
+                            .toggleStyle(.checkbox)
+                            .frame(width: 92)
                         Button {
                             removeMember(index)
                         } label: {
@@ -424,6 +433,9 @@ private struct MemberListEditor: View {
                     Toggle("仅校对", isOn: $newProofOnly)
                         .toggleStyle(.checkbox)
                         .frame(width: 72)
+                    Toggle("暂停服侍", isOn: $newPaused)
+                        .toggleStyle(.checkbox)
+                        .frame(width: 92)
                     Button("添加") {
                         addMember()
                     }
@@ -474,6 +486,22 @@ private struct MemberListEditor: View {
         )
     }
 
+    private func pausedBinding(_ index: Int) -> Binding<Bool> {
+        Binding(
+            get: {
+                let members = store.memberPools[group] ?? []
+                guard members.indices.contains(index) else { return false }
+                return members[index].paused
+            },
+            set: { newValue in
+                var members = store.memberPools[group] ?? []
+                guard members.indices.contains(index) else { return }
+                members[index].paused = newValue
+                store.memberPools[group] = members
+            }
+        )
+    }
+
     private func removeMember(_ index: Int) {
         var members = store.memberPools[group] ?? []
         guard members.indices.contains(index) else { return }
@@ -485,10 +513,11 @@ private struct MemberListEditor: View {
         let value = newMember.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !value.isEmpty else { return }
         var members = store.memberPools[group] ?? []
-        members.append(MemberEntry(name: value, proofOnly: newProofOnly))
+        members.append(MemberEntry(name: value, proofOnly: newProofOnly, paused: newPaused))
         store.memberPools[group] = members
         newMember = ""
         newProofOnly = false
+        newPaused = false
     }
 }
 
@@ -507,6 +536,7 @@ private struct ScheduleImageView: View {
             Text("\(monthTitle)一堂媒体组服侍安排")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(.black)
+                .frame(maxWidth: .infinity, alignment: .center)
 
             VStack(spacing: 0) {
                 HStack(spacing: 0) {

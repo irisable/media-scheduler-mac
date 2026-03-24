@@ -13,6 +13,12 @@ let package = Package(
         .executableTarget(
             name: "MinistryScheduler",
             path: ".",
+            exclude: [
+                "dist",
+                "packaging",
+                "scripts",
+                "package_app.sh"
+            ],
             sources: [
                 "MinistrySchedulerApp.swift",
                 "Models.swift",
@@ -22,4 +28,3 @@ let package = Package(
         )
     ]
 )
-
