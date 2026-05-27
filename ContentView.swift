@@ -47,7 +47,7 @@ struct ContentView: View {
     private var headerBar: some View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("服侍排班")
+                Text("Meida Scheduler")
                     .font(.title2.weight(.bold))
                 Text("\(store.monthTitle())（自动提取下月每个周日）")
                     .foregroundStyle(.secondary)
@@ -305,7 +305,7 @@ struct ContentView: View {
 
     private func renderedScheduleImage() -> NSImage? {
         let renderView = ScheduleImageView(monthTitle: store.monthTitle(), rows: store.rows)
-            .frame(width: 760)
+            .frame(width: 700)
             .padding(10)
             .background(.white)
 

@@ -196,7 +196,8 @@ final class SchedulerStore: ObservableObject {
 
             func solveRole(_ roleIndex: Int) -> Bool {
                 if roleIndex == roleOrder.count {
-                    let row = ScheduleRow(date: dates[weekIndex], assignments: rowAssignments, note: "")
+                    let note = weekIndex == 0 ? "圣餐主日" : ""
+                    let row = ScheduleRow(date: dates[weekIndex], assignments: rowAssignments, note: note)
                     builtRows.append(row)
                     let currentWeekNames = Set(rowAssignments.values.filter { !$0.isEmpty })
                     if solveWeek(weekIndex + 1, previousWeekNames: currentWeekNames) {

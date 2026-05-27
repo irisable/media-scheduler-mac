@@ -5,17 +5,17 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>zh_CN</string>
     <key>CFBundleDisplayName</key>
-    <string>media-scheduler-mac</string>
+    <string>Meida Scheduler</string>
     <key>CFBundleExecutable</key>
-    <string>media-scheduler-mac</string>
+    <string>Meida Scheduler</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
-    <string>com.iris.media-scheduler-mac</string>
+    <string>com.iris.meida-scheduler</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>media-scheduler-mac</string>
+    <string>Meida Scheduler</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

@@ -4,7 +4,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BUILD_PRODUCT="MinistryScheduler"
-APP_NAME="media-scheduler-mac"
+APP_NAME="Meida Scheduler"
 BUILD_DIR="$ROOT_DIR/.build/arm64-apple-macosx/release"
 APP_DIR="$ROOT_DIR/dist/$APP_NAME.app"
 CONTENTS_DIR="$APP_DIR/Contents"

@@ -17,7 +17,8 @@ let package = Package(
                 "dist",
                 "packaging",
                 "scripts",
-                "package_app.sh"
+                "package_app.sh",
+                "README.md"
             ],
             sources: [
                 "MinistrySchedulerApp.swift",
